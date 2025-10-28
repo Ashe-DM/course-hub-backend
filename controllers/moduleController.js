@@ -1,6 +1,5 @@
 const Module = require('../models/Module');
 
-// Get all modules
 exports.getAllModules = async (req, res) => {
   try {
     const modules = await Module.find();
@@ -10,7 +9,6 @@ exports.getAllModules = async (req, res) => {
   }
 };
 
-// Get single module
 exports.getModuleById = async (req, res) => {
   try {
     const module = await Module.findById(req.params.id);
@@ -23,12 +21,11 @@ exports.getModuleById = async (req, res) => {
   }
 };
 
-// Create new module
 exports.createModule = async (req, res) => {
   const module = new Module({
     name: req.body.name,
-    lessons: req.body.lessons || [],
-    projects: req.body.projects || []
+    description: req.body.description || '',
+    units: req.body.units || []
   });
 
   try {
@@ -39,17 +36,18 @@ exports.createModule = async (req, res) => {
   }
 };
 
-// Add lesson to module
-exports.addLesson = async (req, res) => {
+exports.addUnit = async (req, res) => {
   try {
     const module = await Module.findById(req.params.id);
     if (!module) {
       return res.status(404).json({ message: 'Module not found' });
     }
     
-    module.lessons.push({
+    module.units.push({
       title: req.body.title,
-      description: req.body.description || ''
+      description: req.body.description || '',
+      items: [],
+      order: req.body.order || module.units.length
     });
     
     const updatedModule = await module.save();
@@ -59,17 +57,25 @@ exports.addLesson = async (req, res) => {
   }
 };
 
-// Add project to module
-exports.addProject = async (req, res) => {
+exports.addItem = async (req, res) => {
   try {
-    const module = await Module.findById(req.params.id);
+    const module = await Module.findById(req.params.moduleId);
     if (!module) {
       return res.status(404).json({ message: 'Module not found' });
     }
     
-    module.projects.push({
+    const unit = module.units.id(req.params.unitId);
+    if (!unit) {
+      return res.status(404).json({ message: 'Unit not found' });
+    }
+    
+    unit.items.push({
+      type: req.body.type,
       title: req.body.title,
-      description: req.body.description || ''
+      duration: req.body.duration || '',
+      content: req.body.content || '',
+      questions: req.body.questions || [],
+      order: req.body.order || unit.items.length
     });
     
     const updatedModule = await module.save();
@@ -79,7 +85,6 @@ exports.addProject = async (req, res) => {
   }
 };
 
-// Update module
 exports.updateModule = async (req, res) => {
   try {
     const module = await Module.findById(req.params.id);
@@ -88,8 +93,8 @@ exports.updateModule = async (req, res) => {
     }
 
     if (req.body.name) module.name = req.body.name;
-    if (req.body.lessons) module.lessons = req.body.lessons;
-    if (req.body.projects) module.projects = req.body.projects;
+    if (req.body.description) module.description = req.body.description;
+    if (req.body.units) module.units = req.body.units;
 
     const updatedModule = await module.save();
     res.json(updatedModule);
@@ -98,7 +103,6 @@ exports.updateModule = async (req, res) => {
   }
 };
 
-// Delete module
 exports.deleteModule = async (req, res) => {
   try {
     const module = await Module.findById(req.params.id);
