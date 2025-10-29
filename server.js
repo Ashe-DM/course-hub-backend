@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
+const compression = require('compression');
 
 // Middleware - runs before your routes
 app.use(cors()); // Allows React (localhost:5173) to talk to Express
@@ -18,10 +19,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'Backend is running!' });
 });
 
+const sitemapRouter = require('./routes/sitemap');
+app.use('/', sitemapRouter);
+
+app.use(compression());
+
 // Connect to MongoDB
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/course-hub')
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/course-hub')
   .then(() => {
     console.log('✅ Connected to MongoDB');
     app.listen(PORT, () => {
