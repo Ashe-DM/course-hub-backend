@@ -69,18 +69,21 @@ exports.addItem = async (req, res) => {
       return res.status(404).json({ message: 'Unit not found' });
     }
     
-    unit.items.push({
+    const newItem = {
       type: req.body.type,
       title: req.body.title,
       duration: req.body.duration || '',
       content: req.body.content || '',
       questions: req.body.questions || [],
       order: req.body.order || unit.items.length
-    });
+    };
+
+    unit.items.push(newItem);
     
     const updatedModule = await module.save();
     res.json(updatedModule);
   } catch (error) {
+    console.error('Error adding item:', error);
     res.status(400).json({ message: error.message });
   }
 };

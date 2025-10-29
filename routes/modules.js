@@ -9,5 +9,6 @@ router.post('/:id/units', moduleController.addUnit);
 router.post('/:moduleId/units/:unitId/items', moduleController.addItem);
 router.put('/:id', moduleController.updateModule);
 router.delete('/:id', moduleController.deleteModule);
+router.post('/:moduleId/units/:unitId/items', moduleController.addItem);
 
 module.exports = router;
