@@ -3,23 +3,21 @@ const mongoose = require('mongoose');
 const itemSchema = new mongoose.Schema({
   type: { 
     type: String, 
-    enum: ['reading', 'lab', 'quiz', 'video'], 
+    enum: ['article', 'video', 'test', 'reading', 'lab', 'quiz'], 
     required: true 
   },
   title: { type: String, required: true },
   duration: { type: String, default: '' }, // "10 min", "1h", etc.
-  content: { type: String, default: '' }, // For readings/labs
-  
-  // For quizzes only
+  content: { type: String, default: '' }, // For articles/readings/labs
+  videoUrl: { type: String, default: '' }, // For videos
+  // For quizzes/tests only
   questions: [{
     question: { type: String },
     options: [{ type: String }],
     correctAnswer: { type: Number },
     explanation: { type: String }
   }],
-  
-  order: { type: Number, default: 0 },
-  completed: { type: Boolean, default: false }
+  order: { type: Number, default: 0 }
 }, { timestamps: true });
 
 const unitSchema = new mongoose.Schema({
@@ -30,9 +28,22 @@ const unitSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const moduleSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
+  title: { type: String, required: true, trim: true }, // Changed from 'name' to 'title'
+  name: { type: String, trim: true }, // Keep 'name' for backward compatibility
   description: { type: String, default: '' },
-  units: [unitSchema]
+  units: [unitSchema],
+  category: { type: String, default: 'Digital Marketing' },
+  rating: { type: Number, default: 4.8 },
+  totalMinutes: { type: Number, default: 0 }
 }, { timestamps: true });
+
+// Virtual to ensure 'title' is always available
+moduleSchema.virtual('displayTitle').get(function() {
+  return this.title || this.name;
+});
+
+// Ensure virtuals are included in JSON
+moduleSchema.set('toJSON', { virtuals: true });
+moduleSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model('Module', moduleSchema);

@@ -10,5 +10,7 @@ router.post('/:moduleId/units/:unitId/items', moduleController.addItem);
 router.put('/:id', moduleController.updateModule);
 router.delete('/:id', moduleController.deleteModule);
 router.post('/:moduleId/units/:unitId/items', moduleController.addItem);
+router.put('/:moduleId/units/:unitId/items/:itemId', moduleController.updateItem);
+router.delete('/:moduleId/units/:unitId/items/:itemId', moduleController.deleteItem);
 
 module.exports = router;
