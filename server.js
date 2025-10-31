@@ -7,7 +7,10 @@ require('dotenv').config();
 const app = express();
 
 // Middleware - runs before your routes
-app.use(cors()); // Allows React (localhost:5173) to talk to Express
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000'], // Allow frontend
+  credentials: true
+})); 
 app.use(express.json()); // Parses JSON from requests
 app.use(compression());
 
@@ -33,7 +36,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/course-hu
   .then(() => {
     console.log('✅ Connected to MongoDB');
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`); // FIXED: Was console.log` ... `)
     });
   })
   .catch((err) => {

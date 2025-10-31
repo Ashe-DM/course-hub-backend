@@ -28,13 +28,17 @@ const unitSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const moduleSchema = new mongoose.Schema({
-  title: { type: String, required: true, trim: true }, // Changed from 'name' to 'title'
-  name: { type: String, trim: true }, // Keep 'name' for backward compatibility
+  title: { type: String, required: true, trim: true },
+  name: { type: String, trim: true }, // Keep for backward compatibility
   description: { type: String, default: '' },
+  imageUrl: { type: String, default: '' }, // Module cover image
   units: [unitSchema],
   category: { type: String, default: 'Digital Marketing' },
   rating: { type: Number, default: 4.8 },
-  totalMinutes: { type: Number, default: 0 }
+  totalMinutes: { type: Number, default: 0 },
+  instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Who created it
+  students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Enrolled students
+  isPublished: { type: Boolean, default: false } // Draft or published
 }, { timestamps: true });
 
 // Virtual to ensure 'title' is always available
