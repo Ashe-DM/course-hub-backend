@@ -18,13 +18,15 @@ app.use(compression());
 const modulesRouter = require('./routes/modules');
 const authRouter = require('./routes/auth');
 const progressRouter = require('./routes/progress');
-const gamificationRouter = require('./routes/gamification'); // ✨ NEW
+const gamificationRouter = require('./routes/gamification');
+const usersRouter = require('./routes/users'); // ✨ NEW
 const sitemapRouter = require('./routes/sitemap');
 
 app.use('/api/modules', modulesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/progress', progressRouter);
-app.use('/api/gamification', gamificationRouter); // ✨ NEW
+app.use('/api/gamification', gamificationRouter);
+app.use('/api/users', usersRouter); // ✨ NEW
 app.use('/', sitemapRouter);
 
 // Test route
