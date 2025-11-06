@@ -1,3 +1,4 @@
+//moduleController.js
 const Module = require('../models/Module');
 
 exports.getAllModules = async (req, res) => {

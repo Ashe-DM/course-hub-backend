@@ -1,3 +1,4 @@
+//Gamification.js
 const mongoose = require('mongoose');
 
 // Badge definitions

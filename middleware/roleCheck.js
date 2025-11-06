@@ -1,3 +1,4 @@
+//roleCheck.js
 const User = require('../models/User');
 
 // Middleware to check if user has required role(s)

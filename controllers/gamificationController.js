@@ -1,3 +1,4 @@
+//gamificationController.js
 const { UserPoints, PointsActivity, Badge } = require('../models/Gamification');
 
 // Get user's points and achievements
