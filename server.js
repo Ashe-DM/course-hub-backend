@@ -20,9 +20,9 @@ console.log('- RENDER (Render specific):', process.env.RENDER);
 // Middleware - runs before your routes
 app.use(cors({
   origin: [
-    'http://localhost:5173', 
-    'http://localhost:3000',
-    'https://course-hn4py1yoy-ashes-projects-d37a6780.vercel.app'
+    'http://localhost:5173',  // Old React dev server (can remove later)
+    'http://localhost:3000',  // ✅ Next.js dev server
+    'https://course-hn4py1yoy-ashes-projects-d37a6780.vercel.app' // Your deployed frontend
   ],
   credentials: true
 })); 
@@ -62,7 +62,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => {
     console.log('✅ Connected to MongoDB');
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`); // ⚠️ FIX: Remove template literal backticks
     });
   })
   .catch((err) => {
